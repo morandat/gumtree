@@ -38,7 +38,7 @@ public class DiffOptions {
 	
 	public String[] getGenerators() {
 		if (generators == null) return null;
-		else return generators.split("\\.");
+		else return generators.split(",");
 	}
 	
 }
