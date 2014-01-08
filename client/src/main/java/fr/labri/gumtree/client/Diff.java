@@ -6,6 +6,7 @@ import java.util.Arrays;
 import javax.swing.JFrame;
 
 import fr.labri.shelly.ConverterFactory.CommaSeparated;
+import fr.labri.shelly.HelpFactory;
 import fr.labri.shelly.Shelly;
 import fr.labri.shelly.annotations.*;
 import fr.labri.gumtree.client.ui.swing.MappingsPanel;
@@ -14,8 +15,12 @@ import fr.labri.gumtree.matchers.Matcher;
 import fr.labri.gumtree.matchers.MatcherFactories;
 import fr.labri.gumtree.tree.Tree;
 
+@Group(summary = "Diff via Gumtree command line front-end")
 public class Diff {
 
+	@Option(factory=HelpFactory.Factory.class)
+	public void help() {}
+	
 	@Option(flags = "m", summary = "The qualified name of the class implementing the matcher.")
 	public String matcher = null;
 
@@ -27,6 +32,7 @@ public class Diff {
 	public void generators(String[] generators) {
 		generator = generators;
 	}
+	
 	@Option(flags = "o", summary = "web for the web-based client and swing for the swing-based client.")
 	public ClientType output = ClientType.WEB;
 
@@ -40,37 +46,15 @@ public class Diff {
 		abstract Client newClient(Diff diff, String src, String dst);
 	};
 
-	@Command(summary = "Diff via Gumtree command line front-end")
-	@Default
-	@Ignore
+	@Command @Default @Ignore
 	public void diff(String src, String dst) {
 		System.out.println("output: " + output);
 		System.out.println("generators: "+ Arrays.toString(generator));
 		System.out.println("matcher: "+ matcher);
 		System.out.println("src: " + src);
 		System.out.println("dst: " + dst);;
-		// output.newClient(this, src, dst).start();
+		output.newClient(this, src, dst).start();
 	}
-
-//	class TreeFactory implements ConverterFactory {
-//		@Override
-//		public Converter<?> getConverter(Class<?> type) {
-//			if (type.isAssignableFrom(String.class))
-//				return new Converter.SimpleConverter<Tree>() {
-//					@Override
-//					public Tree convert(String value) {
-//						try {
-//							Tree t = TreeGeneratorRegistry.getInstance().getTree(value, generator);
-//							return t;
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						}
-//						return null;
-//					}
-//				};
-//			return null;
-//		}
-//	}
 
 	public static void main(String[] args) throws Exception {
 		if (true)
