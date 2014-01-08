@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.labri.gumtree.gen.c.CTreeGenerator;
-import fr.labri.gumtree.gen.jdt.JdtTreeGenerator;
-import fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator;
+
+
+
+
+
+//import fr.labri.gumtree.gen.c.CTreeGenerator;
 import fr.labri.gumtree.gen.js.RhinoTreeGenerator;
 import fr.labri.gumtree.gen.xml.XMLTreeGenerator;
 import fr.labri.gumtree.io.TreeGenerator;
@@ -26,11 +29,21 @@ public class TreeGeneratorRegistry {
 	
 	private TreeGeneratorRegistry() {
 		producers = new ArrayList<>();
-		producers.add(new JdtTreeGenerator());
-		producers.add(new CdJdtTreeGenerator());
-		producers.add(new RhinoTreeGenerator());
-		producers.add(new XMLTreeGenerator());
-		producers.add(new CTreeGenerator());
+		addIfAvialableProducer("fr.labri.gumtree.gen.jdt.JdtTreeGenerator");
+		addIfAvialableProducer("fr.labri.gumtree.gen.jdt.cd.CdJdtTreeGenerator");
+		addIfAvialableProducer("fr.labri.gumtree.gen.js.RhinoTreeGenerator");
+		addIfAvialableProducer("fr.labri.gumtree.gen.xml.XMLTreeGenerator");
+		addIfAvialableProducer("fr.labri.gumtree.gen.c.CTreeGenerator");
+	}
+	
+	private void addIfAvialableProducer(String treeGenerator) {
+		try {
+			@SuppressWarnings("unchecked")
+			Class<TreeGenerator> c = (Class<TreeGenerator>) Class.forName(treeGenerator);
+			producers.add(c.newInstance());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private TreeGenerator getGenerator(String file, String[] generators) {
