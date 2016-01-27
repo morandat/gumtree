@@ -1,0 +1,21 @@
+plugins {
+    id 'me.champeau.gradle.jmh' version '0.2.0'
+}
+
+apply plugin: 'me.champeau.gradle.jmh'
+
+group 'com.github.gumtreediff'
+version '2.1.0-SNAPSHOT'
+
+dependencies {
+	compile project(':gen.antlr')
+	compile project(':gen.antlr-antlr')
+	compile project(':gen.antlr-css')
+	compile project(':gen.antlr-json')
+	compile project(':gen.antlr-php')
+	compile project(':gen.antlr-xml')
+	compile project(':gen.c')
+	compile project(':gen.jdt')
+	compile project(':gen.js')
+	compile project(':gen.ruby')
+}
